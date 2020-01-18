@@ -1,6 +1,8 @@
 package io.helidon.examples.sockshop.catalog;
 
 import java.io.InputStream;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +17,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
@@ -23,12 +24,11 @@ import javax.json.bind.JsonbBuilder;
  * Default in-memory implementation that can be used for testing.
  */
 @ApplicationScoped
-@Alternative
 public class DefaultCatalogRepository implements CatalogRepository {
     private Map<String, Sock> socks = new ConcurrentHashMap<>();
 
     @Override
-    public Collection<Sock> getSocks(String tags, String order, int pageNum, int pageSize) {
+    public Collection<? extends Sock> getSocks(String tags, String order, int pageNum, int pageSize) {
         Comparator<Sock> comparator = "price".equals(order)
                 ? Comparator.comparing(Sock::getPrice)
                 : Comparator.comparing(Sock::getName);
@@ -50,8 +50,8 @@ public class DefaultCatalogRepository implements CatalogRepository {
     }
 
     @Override
-    public int getSockCount(String tags) {
-        return (int) socks.values().stream().filter(new TagsPredicate(tags)).count();
+    public long getSockCount(String tags) {
+        return socks.values().stream().filter(new TagsPredicate(tags)).count();
     }
 
     @Override
@@ -63,19 +63,35 @@ public class DefaultCatalogRepository implements CatalogRepository {
 
     @PostConstruct
     public void loadData() {
-        if (this.socks.isEmpty()) {
-            Jsonb jsonb = JsonbBuilder.create();
-            InputStream in = getClass().getClassLoader().getResourceAsStream("data.json");
-
-            List<Sock> socks = jsonb.fromJson(
-              in,
-              new ArrayList<Sock>(){}.getClass().getGenericSuperclass()
-            );
-
-            Map<String, Sock> sockMap = socks.stream()
-                    .collect(Collectors.toMap(Sock::getId, sock -> sock));
-            this.socks.putAll(sockMap);
+        if (socks.isEmpty()) {
+            loadSocksFromJson(Sock.class)
+                    .forEach(sock -> socks.put(sock.getId(), sock));
         }
+    }
+
+    protected <T> List<T> loadSocksFromJson(Class<T> asClass) {
+        Jsonb jsonb = JsonbBuilder.create();
+        InputStream in = getClass().getClassLoader().getResourceAsStream("data.json");
+
+        return jsonb.fromJson(
+          in,
+          new ParameterizedType() {
+              @Override
+              public Type[] getActualTypeArguments() {
+                  return new Type[] { asClass };
+              }
+
+              @Override
+              public Type getRawType() {
+                  return ArrayList.class;
+              }
+
+              @Override
+              public Type getOwnerType() {
+                  return null;
+              }
+          }
+        );
     }
 
     private static class TagsPredicate implements Predicate<Sock> {

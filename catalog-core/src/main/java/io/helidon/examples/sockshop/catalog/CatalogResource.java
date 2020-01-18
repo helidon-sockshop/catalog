@@ -27,7 +27,7 @@ public class CatalogResource {
 
     @GET
     @Produces(APPLICATION_JSON)
-    public Collection<Sock> getSocks(@QueryParam("tags") String tags,
+    public Collection<? extends Sock> getSocks(@QueryParam("tags") String tags,
                                      @QueryParam("order") @DefaultValue("price") String order,
                                      @QueryParam("page") @DefaultValue("1") int pageNum,
                                      @QueryParam("size") @DefaultValue("10") int pageSize) {
@@ -61,10 +61,10 @@ public class CatalogResource {
     }
 
     public static class Count {
-        public int size;
+        public long size;
         public Object err;
 
-        public Count(int size) {
+        public Count(long size) {
             this.size = size;
         }
     }

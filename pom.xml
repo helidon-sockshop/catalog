@@ -11,6 +11,7 @@
 
     <modules>
         <module>catalog-core</module>
+        <module>catalog-mongo</module>
     </modules>
 
 </project>
