@@ -3,6 +3,8 @@ package io.helidon.examples.sockshop.catalog.mongo;
 import java.util.List;
 import java.util.Set;
 
+import javax.json.bind.annotation.JsonbTransient;
+
 import io.helidon.examples.sockshop.catalog.Sock;
 
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -12,7 +14,7 @@ import org.bson.types.ObjectId;
  * @author Aleksandar Seovic  2020.01.16
  */
 public class MongoSock extends Sock {
-    @BsonId
+    @JsonbTransient
     public ObjectId _id;
 
     public MongoSock() {
