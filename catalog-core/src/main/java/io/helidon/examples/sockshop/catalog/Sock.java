@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -31,6 +32,7 @@ public class Sock implements Serializable {
     /**
      * A list of product image URLs.
      */
+    @ElementCollection
     private List<String> imageUrl;
 
     /**
@@ -46,5 +48,6 @@ public class Sock implements Serializable {
     /**
      * Product tags.
      */
+    @ElementCollection
     private Set<String> tag;
 }
