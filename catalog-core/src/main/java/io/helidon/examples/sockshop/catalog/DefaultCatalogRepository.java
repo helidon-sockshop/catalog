@@ -93,7 +93,7 @@ public class DefaultCatalogRepository implements CatalogRepository {
     /**
      * Load test data into this repository.
      */
-    protected CatalogRepository loadData() {
+    public CatalogRepository loadData() {
         if (socks.isEmpty()) {
             loadSocksFromJson(Sock.class)
                     .forEach(sock -> socks.put(sock.getId(), sock));

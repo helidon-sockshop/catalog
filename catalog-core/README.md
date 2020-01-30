@@ -21,12 +21,12 @@ $ docker run -p 7001:7001 helidonsockshop/catalog-core
 ``` 
 
 Once the container is up and running, you should be able to access [service API](../README.md#api) 
-by navigating to http://localhost:7001/catalog/.
+by navigating to http://localhost:7001/catalogue/.
 
-As a basic test, you should be able to perform an HTTP GET against `/catalog` endpoint:
+As a basic test, you should be able to perform an HTTP GET against `/catalogue/size` endpoint:
 
 ```bash
-$ curl http://localhost:7001/catalog/size
+$ curl http://localhost:7001/catalogue/size
 ``` 
 which should return JSON response
 ```json
