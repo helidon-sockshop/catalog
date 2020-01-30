@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 /**
  * Implementation of the Catalog Service {@code /catalogue} API.
@@ -48,8 +49,11 @@ public class CatalogResource {
     @GET
     @Path("{id}")
     @Produces(APPLICATION_JSON)
-    public Sock getSock(@PathParam("id") String sockId) {
-        return catalog.getSock(sockId);
+    public Response getSock(@PathParam("id") String sockId) {
+        Sock sock = catalog.getSock(sockId);
+        return sock == null
+                ? Response.status(NOT_FOUND).build()
+                : Response.ok(sock).build();
     }
 
     @GET
@@ -57,10 +61,9 @@ public class CatalogResource {
     @Produces("image/jpeg")
     public Response getImage(@PathParam("image") String image) {
         InputStream img = getClass().getClassLoader().getResourceAsStream("web/images/" + image);
-        if (img == null) {
-            throw new NotFoundException();
-        }
-        return Response.ok(img).build();
+        return img == null
+                ? Response.status(NOT_FOUND).build()
+                : Response.ok(img).build();
     }
 
     public static class Count {

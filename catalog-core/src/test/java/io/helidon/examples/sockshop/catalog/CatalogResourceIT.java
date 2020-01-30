@@ -66,6 +66,30 @@ public class CatalogResourceIT {
     }
 
     @Test
+    void testGetByMissingId() {
+        when().
+                get("/catalogue/{productId}", "bad_ID").
+        then().
+                statusCode(404);
+    }
+
+    @Test
+    void testGetImage() {
+        when().
+                get("/catalogue/images/{imageId}", "puma_1.jpeg").
+        then().
+                statusCode(200);
+    }
+
+    @Test
+    void testGetMissingImage() {
+        when().
+                get("/catalogue/images/{imageId}", "bad_ID").
+        then().
+                statusCode(404);
+    }
+
+    @Test
     void testSockCountWithoutFilter() {
         when().
                 get("/catalogue/size").
