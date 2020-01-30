@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+/**
+ * Implementation of the Catalog Service {@code /tags} API.
+ */
 @ApplicationScoped
 @Path("/tags")
 public class TagsResource {

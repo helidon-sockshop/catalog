@@ -17,6 +17,9 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+/**
+ * Implementation of the Catalog Service {@code /catalogue} API.
+ */
 @ApplicationScoped
 @Path("/catalogue")
 public class CatalogResource {

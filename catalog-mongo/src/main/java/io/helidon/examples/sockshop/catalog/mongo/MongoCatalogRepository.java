@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -15,10 +14,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
 
+import io.helidon.examples.sockshop.catalog.CatalogRepository;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 import io.helidon.examples.sockshop.catalog.Sock;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Sorts;
 import org.bson.BsonDocument;
 import org.bson.conversions.Bson;
@@ -27,19 +28,29 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.or;
 
 /**
- * @author Aleksandar Seovic  2020.01.16
+ * An implementation of {@link io.helidon.examples.sockshop.catalog.CatalogRepository}
+ * that that uses MongoDB as a backend data store.
  */
 @ApplicationScoped
 @Specializes
 public class MongoCatalogRepository extends DefaultCatalogRepository {
-    private static final Logger LOGGER = Logger.getLogger(MongoCatalogRepository.class.getName());
 
-    @Inject
     private MongoCollection<MongoSock> socks;
 
+    @Inject
+    MongoCatalogRepository(MongoCollection<MongoSock> socks) {
+        this.socks = socks;
+    }
+
+    @PostConstruct
+    void init() {
+        loadData();
+        socks.createIndex(Indexes.hashed("id"));
+    }
+
     @Override
-    public Collection<? extends Sock> getSocks(String tags, String order, int pageNum, int pageSize) {
-        ArrayList<MongoSock> results = new ArrayList<>(pageSize);
+    public Collection<? extends MongoSock> getSocks(String tags, String order, int pageNum, int pageSize) {
+        ArrayList<MongoSock> results = new ArrayList<>();
 
         int skipCount = pageSize * (pageNum - 1);
         socks.find(tagsFilter(tags))
@@ -52,7 +63,7 @@ public class MongoCatalogRepository extends DefaultCatalogRepository {
     }
 
     @Override
-    public Sock getSock(String sockId) {
+    public MongoSock getSock(String sockId) {
         return socks.find(eq("id", sockId)).first();
     }
 
@@ -70,13 +81,20 @@ public class MongoCatalogRepository extends DefaultCatalogRepository {
     }
 
     @Override
-    @PostConstruct
-    public void loadData() {
+    public CatalogRepository loadData() {
         if (this.socks.countDocuments() == 0) {
             this.socks.insertMany(loadSocksFromJson(MongoSock.class));
         }
+        return this;
     }
 
+    /**
+     * Helper method to create tags filter.
+     *
+     * @param tags a comma-separated list of tags; can be {@code null}
+     *
+     * @return a MongoDB filter for the specified tags
+     */
     private Bson tagsFilter(String tags) {
         if (tags != null && !"".equals(tags)) {
             List<Bson> filters = Arrays.stream(tags.split(","))
