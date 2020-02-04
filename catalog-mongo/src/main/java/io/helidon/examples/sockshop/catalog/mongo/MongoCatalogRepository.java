@@ -16,13 +16,13 @@ import javax.inject.Inject;
 
 import io.helidon.examples.sockshop.catalog.CatalogRepository;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
-import io.helidon.examples.sockshop.catalog.Sock;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Sorts;
 import org.bson.BsonDocument;
 import org.bson.conversions.Bson;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.or;
@@ -33,6 +33,7 @@ import static com.mongodb.client.model.Filters.or;
  */
 @ApplicationScoped
 @Specializes
+@Traced
 public class MongoCatalogRepository extends DefaultCatalogRepository {
 
     private MongoCollection<MongoSock> socks;

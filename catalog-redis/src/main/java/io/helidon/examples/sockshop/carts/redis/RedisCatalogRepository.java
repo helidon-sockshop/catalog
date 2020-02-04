@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 import io.helidon.examples.sockshop.catalog.Sock;
 
+import org.eclipse.microprofile.opentracing.Traced;
 import org.redisson.api.RMap;
 
 /**
@@ -15,6 +16,7 @@ import org.redisson.api.RMap;
  */
 @ApplicationScoped
 @Specializes
+@Traced
 public class RedisCatalogRepository extends DefaultCatalogRepository {
     @Inject
     public RedisCatalogRepository(RMap<String, Sock> socks) {

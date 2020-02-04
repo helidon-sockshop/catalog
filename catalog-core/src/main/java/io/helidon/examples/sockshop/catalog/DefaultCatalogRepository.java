@@ -20,6 +20,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import org.eclipse.microprofile.opentracing.Traced;
+
 /**
  * Simple in-memory implementation of {@link io.helidon.examples.sockshop.catalog.CatalogRepository}
  * that can be used for demos and testing.
@@ -29,6 +31,7 @@ import javax.json.bind.JsonbBuilder;
  * API testing and quick demos.
  */
 @ApplicationScoped
+@Traced
 public class DefaultCatalogRepository implements CatalogRepository {
     private Map<String, Sock> socks;
 

@@ -15,12 +15,15 @@ import javax.transaction.Transactional;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 import io.helidon.examples.sockshop.catalog.Sock;
 
+import org.eclipse.microprofile.opentracing.Traced;
+
 /**
  * An implementation of {@link io.helidon.examples.sockshop.catalog.CatalogRepository}
  * that that uses relational database (via JPA) as a backend data store.
  */
 @ApplicationScoped
 @Specializes
+@Traced
 public class JpaCatalogRepository extends DefaultCatalogRepository {
 
     @PersistenceContext
