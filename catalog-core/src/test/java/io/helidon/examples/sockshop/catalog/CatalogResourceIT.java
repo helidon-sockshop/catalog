@@ -3,6 +3,7 @@ package io.helidon.examples.sockshop.catalog;
 import io.helidon.microprofile.server.Server;
 
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,11 @@ public class CatalogResourceIT {
      * We can discover the actual port by calling {@link io.helidon.microprofile.server.Server#port()} method afterwards.
      */
     private static final Server SERVER = Server.builder().port(0).build().start();
+
+    @AfterAll
+    static void stopServer() {
+        SERVER.stop();
+    }
 
     @BeforeEach
     void setup() {

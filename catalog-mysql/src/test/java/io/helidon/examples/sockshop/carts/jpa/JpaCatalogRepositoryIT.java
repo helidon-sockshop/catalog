@@ -4,6 +4,8 @@ import io.helidon.examples.sockshop.catalog.CatalogRepository;
 import io.helidon.examples.sockshop.catalog.CatalogRepositoryTest;
 import io.helidon.microprofile.server.Server;
 
+import org.junit.jupiter.api.AfterAll;
+
 /**
  * Integration tests for {@link JpaCatalogRepository}.
  */
@@ -14,6 +16,11 @@ public class JpaCatalogRepositoryIT extends CatalogRepositoryTest {
      * fully configured repository from the CDI container.
      */
     private static final Server SERVER = Server.builder().port(0).build().start();
+
+    @AfterAll
+    static void stopServer() {
+        SERVER.stop();
+    }
 
     @Override
     protected CatalogRepository getCatalogRepository() {
