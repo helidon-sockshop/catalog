@@ -12,7 +12,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import io.helidon.examples.sockshop.catalog.CatalogRepository;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 import io.helidon.examples.sockshop.catalog.Sock;
 
@@ -36,14 +35,17 @@ public class JpaCatalogRepository extends DefaultCatalogRepository {
         ensureDataLoaded();
 
         StringBuilder jql = new StringBuilder("select distinct s from Sock as s");
-        if (tags != null) {
+
+        boolean fTags = tags != null && tags.length() > 0;
+        if (fTags) {
             jql.append(" join s.tag t where t in :tags");
         }
         if (order != null) {
             jql.append(" order by s.").append(order);
         }
+
         TypedQuery query = em.createQuery(jql.toString(), Sock.class);
-        if (tags != null) {
+        if (fTags) {
             query.setParameter("tags", Arrays.asList(tags.split(",")));
         }
         if (pageNum > 0 && pageSize > 0) {
@@ -66,11 +68,14 @@ public class JpaCatalogRepository extends DefaultCatalogRepository {
     public long getSockCount(String tags) {
         ensureDataLoaded();
         StringBuilder jql = new StringBuilder("Select count(distinct s) from Sock as s");
-        if (tags != null) {
+
+        boolean fTags = tags != null && tags.length() > 0;
+        if (fTags) {
             jql.append(" join s.tag t where t in :tags");
         }
+
         Query query = em.createQuery(jql.toString());
-        if (tags != null) {
+        if (fTags) {
             query.setParameter("tags", Arrays.asList(tags.split(",")));
         }
 
