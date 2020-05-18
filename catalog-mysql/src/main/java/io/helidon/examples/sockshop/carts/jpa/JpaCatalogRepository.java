@@ -24,7 +24,7 @@ import org.eclipse.microprofile.opentracing.Traced;
 @ApplicationScoped
 @Specializes
 @Traced
-public class JpaCatalogRepository extends DefaultCatalogRepository {
+    public class JpaCatalogRepository extends DefaultCatalogRepository {
 
     @PersistenceContext
     private EntityManager em;
