@@ -17,16 +17,17 @@ public abstract class CatalogRepositoryTest {
     private CatalogRepository catalog = getCatalogRepository();
 
     protected abstract CatalogRepository getCatalogRepository();
+    int pagesize = 100;
 
     @Test
     void testQueryWithoutFilter() {
-        Collection<? extends Sock> socks = catalog.getSocks(null, "price", 1, Integer.MAX_VALUE);
+        Collection<? extends Sock> socks = catalog.getSocks(null, "price", 1, pagesize);
         assertThat(socks.size(), is(9));
     }
 
     @Test
     void testQueryWithFilter() {
-        Collection<? extends Sock> socks = catalog.getSocks("blue,green", "price", 1, Integer.MAX_VALUE);
+        Collection<? extends Sock> socks = catalog.getSocks("blue,green", "price", 1, pagesize);
         assertThat(socks.size(), is(6));
     }
 
