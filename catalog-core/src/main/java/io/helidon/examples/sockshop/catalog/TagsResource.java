@@ -4,7 +4,6 @@ import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 /**
@@ -12,12 +11,12 @@ import javax.ws.rs.Path;
  */
 @ApplicationScoped
 @Path("/tags")
-public class TagsResource {
+public class TagsResource implements TagApi {
 
     @Inject
     private CatalogRepository catalog;
 
-    @GET
+    @Override
     public Tags getTags() {
         return new Tags(catalog.getTags());
     }
