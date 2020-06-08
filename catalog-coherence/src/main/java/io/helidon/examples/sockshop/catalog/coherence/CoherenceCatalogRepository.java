@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.catalog.Sock;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 
-import com.oracle.coherence.cdi.Cache;
+import com.oracle.coherence.cdi.Name;
 import com.tangosol.util.Aggregators;
 import com.tangosol.util.Filter;
 import com.tangosol.util.Filters;
@@ -41,7 +41,7 @@ import com.tangosol.util.filter.AlwaysFilter;
 import com.tangosol.util.filter.LimitFilter;
 import org.eclipse.microprofile.opentracing.Traced;
 
-import com.tangosol.net.NamedCache;
+import com.tangosol.net.NamedMap;
 
 import static javax.interceptor.Interceptor.Priority.APPLICATION;
 
@@ -54,12 +54,12 @@ import static javax.interceptor.Interceptor.Priority.APPLICATION;
 @Priority(APPLICATION)
 @Traced
 public class CoherenceCatalogRepository extends DefaultCatalogRepository {
-    private NamedCache<String, Sock> socks;
+    private NamedMap<String, Sock> socks;
     private static Comparator<Sock> PRICE_COMPARATOR = new ExtractorComparator<>(new UniversalExtractor<Sock, Float>("price"));
     private static Comparator<Sock> NAME_COMPARATOR  = new ExtractorComparator<>(new UniversalExtractor<Sock, String>("name"));
 
     @Inject
-    public CoherenceCatalogRepository(@Cache("socks") NamedCache<String, Sock> socks) {
+    public CoherenceCatalogRepository(@Name("socks") NamedMap<String, Sock> socks) {
         super(socks);
         this.socks = socks;
     }
