@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.catalog.Sock;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 
-import com.oracle.coherence.cdi.Name;
+import com.oracle.coherence.inject.Name;
 import com.tangosol.util.Aggregators;
 import com.tangosol.util.Filter;
 import com.tangosol.util.Filters;
