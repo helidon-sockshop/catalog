@@ -7,13 +7,14 @@
 
 package io.helidon.examples.sockshop.catalog.coherence;
 
+import com.tangosol.net.Coherence;
+
 import javax.enterprise.inject.spi.CDI;
 
 import io.helidon.examples.sockshop.catalog.CatalogRepository;
 import io.helidon.examples.sockshop.catalog.CatalogRepositoryTest;
 import io.helidon.microprofile.server.Server;
 
-import com.tangosol.net.CacheFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -40,6 +41,7 @@ class CoherenceCatalogRepositoryIT extends CatalogRepositoryTest {
     @AfterAll
     static void stopServer() {
         SERVER.stop();
+        Coherence.closeAll();
     }
 
     public CatalogRepository getCatalogRepository() {
