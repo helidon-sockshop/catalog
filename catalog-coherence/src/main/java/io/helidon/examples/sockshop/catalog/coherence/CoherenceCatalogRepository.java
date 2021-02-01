@@ -22,7 +22,10 @@ import javax.inject.Inject;
 import io.helidon.examples.sockshop.catalog.Sock;
 import io.helidon.examples.sockshop.catalog.DefaultCatalogRepository;
 
-import com.oracle.coherence.inject.Name;
+import com.oracle.coherence.cdi.Name;
+
+import com.tangosol.net.NamedMap;
+
 import com.tangosol.util.Aggregators;
 import com.tangosol.util.Filter;
 import com.tangosol.util.Filters;
@@ -30,9 +33,8 @@ import com.tangosol.util.comparator.ExtractorComparator;
 import com.tangosol.util.extractor.UniversalExtractor;
 import com.tangosol.util.filter.AlwaysFilter;
 import com.tangosol.util.filter.LimitFilter;
-import org.eclipse.microprofile.opentracing.Traced;
 
-import com.tangosol.net.NamedMap;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import static javax.interceptor.Interceptor.Priority.APPLICATION;
 
